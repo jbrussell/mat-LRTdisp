@@ -5,7 +5,18 @@ This package is largely based off codes written by Ryan Schultz: [Radon-Transfor
 
 The purpose of this MATLAB package is to extract phase velocity dispersion from multimode surface waves using the Linear Radon Transform (LRT), as demonstrated in Luo et al. (2015). The input is a record section with surface waves windowed in time. The output is a radon panel in the period-phase velocity domain showing the energy contained in the individual mode branches.
 
-An example synthetic Love wave dataset (fundamental through 4th higher mode) is included to demonstrate its application.
+**A note about the inversion:**
+We include several different methods for solving the Radon Transform inverse problem. In general, the sparser the method (so-called "high resolution LRT" methods), the more sensitive it is to noise in the data. We have found that the most stable results come from the Weighted Conjugate Guided Gradient (CGG) of Ji (2006) (i.e., CGG_weight in our notation), but you are urged to try others:
+
+* **L2**: L2-norm ; *Schultz (2012)*
+* **L1**: L1-norm ; *Schultz (2012)*
+* **Cauchy**: Cauchy norm ; *Schultz (2012)*
+* **CGsimple**: Simple conjugate gradient ; *Li (2006)*
+* **CG_IRLS**: Conjugate gradient with iterative reweighted least squares *Li (2006)*
+* **CGG_weight**: Conjugate guided gradient with model and residual weighting **preferred** *Li (2006)*
+* **CGhestenes**: Conjugate gradient with an approximation in the descent calculation that is more numerically stable *Li (2006); Claerbout (1992)*
+
+An example synthetic Love wave dataset (fundamental through 4th higher mode) is included in ./pa5_5km/ to demonstrate its application.
 
 References: 
 
