@@ -11,10 +11,10 @@ We include several different methods for solving the Radon Transform inverse pro
 * **L2**: L2-norm ; *Schultz (2012)*
 * **L1**: L1-norm ; *Schultz (2012)*
 * **Cauchy**: Cauchy norm ; *Schultz (2012)*
-* **CGsimple**: Simple conjugate gradient ; *Li (2006)*
-* **CG_IRLS**: Conjugate gradient with iterative reweighted least squares *Li (2006)*
-* **CGG_weight**: Conjugate guided gradient with model and residual weighting **preferred** *Li (2006)*
-* **CGhestenes**: Conjugate gradient with an approximation in the descent calculation that is more numerically stable *Li (2006); Claerbout (1992)*
+* **CGsimple**: Simple conjugate gradient ; *Ji (2006)*
+* **CG_IRLS**: Conjugate gradient with iterative reweighted least squares ; *Ji (2006)*
+* **CGG_weight**: Conjugate guided gradient with model and residual weighting **preferred** ; *Ji (2006)*
+* **CGhestenes**: Conjugate gradient with an approximation in the descent calculation that is more numerically stable ; *Ji (2006); Claerbout (1992)*
 
 An example synthetic Love wave dataset (fundamental through 4th higher mode) is included in ./pa5_5km/ to demonstrate its application.
 
