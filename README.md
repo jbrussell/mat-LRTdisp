@@ -10,7 +10,7 @@ An example synthetic Love wave dataset (fundamental through 4th higher mode) is 
 ![](./preview.png)
 
 **A note about the LRT inversion:**
-We include several different methods for solving the Radon Transform inverse problem. In general, the sparser the method (so-called "high resolution LRT" methods), the more sensitive it is to noise in the data. We have found that the most stable results come from the Weighted Conjugate Guided Gradient (CGG) of Ji (2006) (i.e., CGG_weight in our notation), but you are urged to try others:
+We include several different methods for solving the Radon Transform inverse problem. In general, the sparser the method (so-called "high resolution LRT" methods), the more sensitive it is to noise in the data. We have found that the most stable results come from the Weighted Conjugate Guided Gradient (CGG) of Ji (2006) (i.e., CGG_weight in our notation), but you are encouraged to try others:
 
 * **L2**: L2-norm ; *Schultz (2012)*
 * **L1**: L1-norm ; *Schultz (2012)*
