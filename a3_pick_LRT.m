@@ -4,21 +4,15 @@
 % github.com/jbrussell
 
 clear;
+setup_parameters;
 
 addpath('./functions/'); addpath('./functions/CG_methods/');
 
-method = 'CGG_weight';
-% method = 'CG_IRLS';
-
 % Load precalculated LRT
-LRTmatpath = './LRT_mats/';
 load([LRTmatpath,'LRT_',method,'.mat']);
 
 % Load PA5 dispersion
 load('./pa5_5km/dispersion_pa5_5km_b5.mat');
-
-% Picks output path
-out_path = './LRT_picks/';
 
 % Normalization option for plotting
 is_globnorm = 1; % 1 for normalize radon panel by global max; 0 for column norm

@@ -9,36 +9,18 @@
 % github.com/jbrussell
 
 clear;
-
-addpath('./functions/'); addpath('./functions/CG_methods/');
-
-% Load Synthetic Love wave data
-ndata = './pa5_5km/Synth_120W_150W.mat';
-load(ndata,'-mat');
-Delta = deg2km(Delta');
-% Load PA5 dispersion
-load('./pa5_5km/dispersion_pa5_5km_b5.mat');
+setup_parameters;
 
 % Save output?
 is_savemat = 1;
 
-% Normalization option for plotting
-is_globnorm = 1; % 1 for normalize radon panel by global max; 0 for column norm
-
-% Define some variables for RT.
-maxiter = 10; %100;
-rthresh = 1e-6;
-method = 'CGG_weight';
-% method = 'CG_IRLS';
+% Load synthetic data
+load(ndata,'-mat');
+Delta = deg2km(Delta');
 delta=mean(Delta);
-f_min = 1/150;
-f_max = 1/20;
-v_min = 4;
-v_max = 8;
-P_axis = [111/(v_max*1.1) : 0.1 : 111/(v_min*0.9)]; % s/deg
-P_axis = P_axis / 111; %(s/km);
 
-isnoise = 0; % add gaussian noise?
+% Load PA5 dispersion
+load('./pa5_5km/dispersion_pa5_5km_b5.mat');
 
 % Organize dipsersion
 BRANCHES=5;
@@ -117,7 +99,6 @@ set(gca,'Position',pos);
 
 %% Save results to mat
 if is_savemat
-    LRTmatpath = './LRT_mats/';
     if ~exist(LRTmatpath)
         mkdir(LRTmatpath);
     end

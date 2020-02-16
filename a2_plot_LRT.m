@@ -4,27 +4,13 @@
 % github.com/jbrussell
 
 clear;
-
-addpath('./functions/'); addpath('./functions/CG_methods/');
-
-method = 'CGG_weight';
-% method = 'CG_IRLS';
+setup_parameters;
 
 % Load precalculated LRT
-LRTmatpath = './LRT_mats/';
 load([LRTmatpath,'LRT_',method,'.mat']);
 
 % Load PA5 dispersion
 load('./pa5_5km/dispersion_pa5_5km_b5.mat');
-
-% Normalization option for plotting
-is_globnorm = 1; % 1 for normalize radon panel by global max; 0 for column norm
-
-% Parameters for tracing dispersion curves
-min_peak_prom = 0.3; % Minimum peak prominence, threshold for peak height
-min_peak_dist = 0.1; % Minimum separation between chosen peaks [km/s]
-Npers = 25; % Number for periods
-pers = logspace(log10(20),log10(150),Npers); % period vector 
 
 % Organize dipsersion
 BRANCHES=5;
