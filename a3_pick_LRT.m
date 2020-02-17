@@ -71,10 +71,9 @@ end
 
 [picks_LRT] = pick_LRT_disp(absR_Tv, mat, per_trace, phv_trace, phv_trace_std);
 
-if ~exist(out_path)
-    mkdir(out_path);
+if ~exist(picks_out_path)
+    mkdir(picks_out_path);
 end
-
 % Save picks to mat file
 if ~isempty(picks_LRT)
     save([picks_out_path,'LRTpicks_',method,'.mat'],'picks_LRT');
