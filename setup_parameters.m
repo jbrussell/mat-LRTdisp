@@ -1,12 +1,17 @@
-
 %% SETUP PATHS
 addpath('./functions/'); addpath('./functions/CG_methods/');
+
 % Input data
 ndata = './pa5_5km/Synth_120W_150W.mat';
+
 % Output LRT panel path (a1)
 LRTmatpath = './LRT_mats/';
+
 % Output path for dispersion picks (a3)
-out_path = './LRT_picks/';
+picks_out_path = './LRT_picks/';
+
+% Figure path
+figpath = './figs/';
 
 %% PARAMETERS
 % Normalization option for plotting

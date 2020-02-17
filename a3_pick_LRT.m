@@ -6,8 +6,6 @@
 clear;
 setup_parameters;
 
-addpath('./functions/'); addpath('./functions/CG_methods/');
-
 % Load precalculated LRT
 load([LRTmatpath,'LRT_',method,'.mat']);
 
@@ -79,7 +77,7 @@ end
 
 % Save picks to mat file
 if ~isempty(picks_LRT)
-    save([out_path,'LRTpicks_',method,'.mat'],'picks_LRT');
+    save([picks_out_path,'LRTpicks_',method,'.mat'],'picks_LRT');
 end
 
 %%

@@ -98,7 +98,6 @@ set(cb,'linewidth',1.5);
 set(gca,'Position',pos);
 %%%%
 
-figpath = './figs/';
 if ~exist(figpath)
     mkdir(figpath);
 end
