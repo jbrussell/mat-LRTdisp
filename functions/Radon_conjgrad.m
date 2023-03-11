@@ -34,6 +34,9 @@ m0 = zeros(length(p),1);
 Rfft = zeros(ip,iF);
 rfft = zeros(size(Mfft));
 for j = 1:length(f)
+    if mod(j,250) == 0 || j==1
+        disp([num2str(j),'/',num2str(length(f))]);
+    end
     exp_arg = -1i*2*pi*f(j).*delta_block.*p_block;
     L = exp(exp_arg);
     d = Mfft(:,j);
