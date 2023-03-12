@@ -61,19 +61,23 @@ end
 % Invert to Radon domain using several different methods with varying
 % degrees of sparseness
 tic;
-[R,Rfft,f]=Radon_inverse_disp(t, Delta, M, P_axis, ones(size(Delta)), delta, 'Linear', 'L2', mu);
+% [R,Rfft,f]=Radon_inverse_disp(t, Delta, M, P_axis, ones(size(Delta)), delta, 'Linear', 'L2', mu);
+[R,Rfft,f]=Radon_inverse_disp_fast(t, Delta, M, P_axis, ones(size(Delta)), delta, f_min,f_max,'Linear', 'L2', mu);
 toc
 
 tic;
-[ Rfft_2,f_2 ] = Radon_conjgrad(P_axis,t,M,Delta,maxiter,rthresh,'CGsimple');
+% [ Rfft_2,f_2 ] = Radon_conjgrad(P_axis,t,M,Delta,maxiter,rthresh,'CGsimple');
+[ Rfft_2,f_2 ] = Radon_conjgrad_fast(P_axis,t,M,Delta,f_min,f_max,maxiter,rthresh,'CGsimple');
 toc
 
 tic;
-[ Rfft_3,f_3 ] = Radon_conjgrad(P_axis,t,M,Delta,maxiter,rthresh,'CGG_weight');
+% [ Rfft_3,f_3 ] = Radon_conjgrad(P_axis,t,M,Delta,maxiter,rthresh,'CGG_weight');
+[ Rfft_3,f_3 ] = Radon_conjgrad_fast(P_axis,t,M,Delta,f_min,f_max,maxiter,rthresh,'CGG_weight');
 toc
 
 tic;
-[ Rfft_4,f_4 ] = Radon_conjgrad(P_axis,t,M,Delta,maxiter,rthresh,'CGhestenes');
+% [ Rfft_4,f_4 ] = Radon_conjgrad(P_axis,t,M,Delta,maxiter,rthresh,'CGhestenes');
+[ Rfft_4,f_4 ] = Radon_conjgrad_fast(P_axis,t,M,Delta,f_min,f_max,maxiter,rthresh,'CGhestenes');
 toc
 
 [~,I_fmin_plot] = min(abs(f-f_min)); [~,I_fmax_plot] = min(abs(f-f_max));

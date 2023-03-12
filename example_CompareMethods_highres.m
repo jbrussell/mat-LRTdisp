@@ -61,19 +61,23 @@ end
 % Invert to Radon domain using several different methods with varying
 % degrees of sparseness
 tic;
-[R,Rfft,f]=Radon_inverse_disp(t, Delta, M, P_axis, ones(size(Delta)), delta, 'Linear', 'L2', mu1);
+% [R,Rfft,f]=Radon_inverse_disp(t, Delta, M, P_axis, ones(size(Delta)), delta, 'Linear', 'L2', mu1);
+[R,Rfft,f]=Radon_inverse_disp_fast(t, Delta, M, P_axis, ones(size(Delta)), delta, f_min,f_max,'Linear', 'L2', mu1);
 toc
 
 tic;
-[~,Rfft_2,f_2 ] = Radon_inverse_disp(t, Delta, M, P_axis, ones(size(Delta)), delta, 'Linear', 'L1', mu2);
+% [~,Rfft_2,f_2 ] = Radon_inverse_disp(t, Delta, M, P_axis, ones(size(Delta)), delta, 'Linear', 'L1', mu2);
+[~,Rfft_2,f_2 ] = Radon_inverse_disp_fast(t, Delta, M, P_axis, ones(size(Delta)), delta, f_min,f_max,'Linear', 'L1', mu2);
 toc
 
 tic;
-[~,Rfft_3,f_3 ] = Radon_inverse_disp(t, Delta, M, P_axis, ones(size(Delta)), delta, 'Linear', 'Cauchy', mu3);
+% [~,Rfft_3,f_3 ] = Radon_inverse_disp(t, Delta, M, P_axis, ones(size(Delta)), delta, 'Linear', 'Cauchy', mu3);
+[~,Rfft_3,f_3 ] = Radon_inverse_disp_fast(t, Delta, M, P_axis, ones(size(Delta)), delta, f_min,f_max,'Linear', 'Cauchy', mu3);
 toc
 
 tic;
-[ Rfft_4,f_4 ] = Radon_conjgrad(P_axis,t,M,Delta,maxiter,rthresh,'CG_IRLS');
+% [ Rfft_4,f_4 ] = Radon_conjgrad(P_axis,t,M,Delta,maxiter,rthresh,'CG_IRLS');
+[ Rfft_4,f_4 ] = Radon_conjgrad_fast(P_axis,t,M,Delta,f_min,f_max,maxiter,rthresh,'CG_IRLS');
 toc
 
 [~,I_fmin_plot] = min(abs(f-f_min)); [~,I_fmax_plot] = min(abs(f-f_max));
