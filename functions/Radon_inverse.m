@@ -50,7 +50,7 @@ function R=Radon_inverse(t,delta,M,p,weights,ref_dist,line_model,inversion_model
   
   % Make sure waveforms are tapered
   for ii = 1:size(M,1)
-    M(ii,:) = cos_taper(M(ii,:));
+      M(ii,:) = cos_taper(M(ii,:));
   end
 
   % Define some array/matrices lengths.
