@@ -51,6 +51,11 @@ function [R,Rfft,fvec]=Radon_inverse_disp_fast(t,delta,M,p,weights,ref_dist,f_mi
     % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     % GNU General Public License for more details: http://www.gnu.org/licenses/
     %
+
+      % Make sure waveforms are tapered
+      for ii = 1:size(M,1)
+          M(ii,:) = cos_taper(M(ii,:));
+      end
       
       % Define some array/matrices lengths.
       it=length(t);

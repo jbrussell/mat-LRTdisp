@@ -14,6 +14,10 @@ function [ Rfft,f ] = Radon_conjgrad(p,t,M,delta,maxiter,rthresh,method)
 % J. Russell
 % github.com/jbrussell
 
+% Make sure waveforms are tapered
+for ii = 1:size(M,1)
+    M(ii,:) = cos_taper(M(ii,:));
+end
 
 % Define some array/matrices lengths.
 it=length(t);
