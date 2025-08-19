@@ -43,24 +43,27 @@ tic;
 toc
 
 [~,I_fmin_plot] = min(abs(f-f_min)); [~,I_fmax_plot] = min(abs(f-f_max));
-I_fmin_plot=I_fmin_plot-1; I_fmax_plot=I_fmax_plot+1;
+I_fmin_plot = max(1, I_fmin_plot-1); I_fmax_plot = min(length(f), I_fmax_plot+1);
 fplot = f(I_fmin_plot:I_fmax_plot);
 [~,I_pmin_plot] = min(abs(P_axis-1/v_max)); [~,I_pmax_plot] = min(abs(P_axis-1/v_min)); 
-I_pmin_plot=I_pmin_plot-1; I_pmax_plot=I_pmax_plot+1;
+I_pmin_plot = max(1, I_pmin_plot-1); I_pmax_plot = min(length(P_axis), I_pmax_plot+1);
 P_axisplot = P_axis(I_pmin_plot:I_pmax_plot);
 
 Rfftplot = Rfft(I_pmin_plot:I_pmax_plot,I_fmin_plot:I_fmax_plot);
 % [ perplot,vplot,R_Tv ] = FreqSlow2PeriodVeloc( fplot,P_axisplot,abs(Rfftplot));
 [ perplot,vplot,R_Tv ] = FreqSlow2PeriodVeloc( fplot,P_axisplot,Rfftplot);
 
+% Convert from frequency-slowness to frequency-velocity
+[Fplot, Vplot2, R_Fv] = FreqSlow2FreqVeloc(fplot, P_axisplot, Rfftplot);
+
 % Apply bandpass filter for plotting waveforms 
-dat_filt = zeros (size(dat));
+dat_filt = zeros(size(M));  
 dt = t(2) - t(1);
-costap_wid = 0.2; 
+costap_wid = 0.2; % 0 => box filter; 1 => Hann window
 for ii = 1:size(dat_filt,1)
-    dat_taper = cos_tapper(dat(ii,:));
+    dat_taper = cos_taper(M(ii,:)); 
     [dat_filt_fft] = tukey_filt( fft(fftshift(dat_taper)),[1/f_max 1/f_min],dt,costap_wid);
-    dat_filt(ii,:) = fftshift (real(ifft(dat_filt_fft)));
+    dat_filt(ii,:) = fftshift(real(ifft(dat_filt_fft)));
 end
 
 %%
@@ -116,6 +119,12 @@ if is_savemat
     mat.R_Tv = abs(R_Tv); % abs() to save space
     mat.per_vec = perplot(1,1:end);
     mat.phv_vec = vplot(1:end,1);
+    
+    % Fixed: Define frequency-velocity variables
+    mat.R_Fv = abs(R_Fv);
+    mat.freq_vec = Fplot(1,1:end);
+    mat.phv_freq_vec = Vplot2(1:end,1);
+    
     mat.ndata = ndata;
     mat.inversion.method = method;
     mat.inversion.maxiter = maxiter;
@@ -154,6 +163,9 @@ caxis([0 1]);
 xlim([min(mat.freq_vec(1,1:end)) max(mat.freq_vec(1,1:end))]);
 % xlim([3 14]);
 ylim([v_min v_max]);
+title(method); ylabel('Velocity (km/s)'); xlabel('Frequency (Hz)');
+set(gca,'YDir','normal');
+colormap([ones(30,3).*[0.2665 0.0033 0.3273]; viridis(100)]);
 title(method); ylabel('Velocity (km/s)'); xlabel('Frequency (Hz)');
 set(gca,'YDir','normal');
 colormap([ones(30,3).*[0.2665 0.0033 0.3273]; viridis(100)]);
