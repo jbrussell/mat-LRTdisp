@@ -52,6 +52,11 @@ function [R,Rfft,fvec]=Radon_inverse_disp(t,delta,M,p,weights,ref_dist,line_mode
 % GNU General Public License for more details: http://www.gnu.org/licenses/
 %
   
+  % Make sure waveforms are tapered
+  for ii = 1:size(M,1)
+      M(ii,:) = cos_taper(M(ii,:));
+  end
+
   % Define some array/matrices lengths.
   it=length(t);
   iF=pow2(nextpow2(it)+1); % Double length

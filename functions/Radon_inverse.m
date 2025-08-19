@@ -48,6 +48,11 @@ function R=Radon_inverse(t,delta,M,p,weights,ref_dist,line_model,inversion_model
 % GNU General Public License for more details: http://www.gnu.org/licenses/
 %
   
+  % Make sure waveforms are tapered
+  for ii = 1:size(M,1)
+      M(ii,:) = cos_taper(M(ii,:));
+  end
+
   % Define some array/matrices lengths.
   it=length(t);
   iF=pow2(nextpow2(it)+1); % Double length
