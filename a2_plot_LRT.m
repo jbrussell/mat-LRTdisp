@@ -28,6 +28,17 @@ end
 load(mat.ndata);
 Delta = deg2km(Delta)';
 
+% Apply bandpass filter for plotting waveforms 
+M_filt = zeros(size(M));  
+dt = t(2) - t(1);
+for ii = 1:size(M_filt,1)
+    dat_taper = cos_taper(M(ii,:)); 
+    fs = 1/dt;
+    [b,a] = butter(2,[f_min/(fs/2) f_max/(fs/2)]); % (20 - 150 seconds)
+    %fvtool(b,a);
+    M_filt(ii,:) = filtfilt(b,a,dat_taper);
+end
+
 %% Find peaks
 if is_globnorm
     R_Tv = abs(mat.R_Tv)./prctile(mat.R_Tv(:),99);
@@ -65,7 +76,8 @@ set(gcf,'Position',[54         292        1069         405]);
 FS = 15;
 
 subplot(1,2,1); box on; hold on;
-plot(t,M./max(M,[],2)*200+Delta','-k','linewidth',1);
+% plot(t,M./max(M,[],2)*200+Delta','-k','linewidth',1);
+plot(t,M_filt./max(M_filt,[],2)*200+Delta','-k','linewidth',1);
 title('Love waves (0T-4T)'); 
 xlabel('Time (s)'); ylabel('Distance (km)');
 set(gca,'YDir','reverse','FontSize',FS,'linewidth',1.5);

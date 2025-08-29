@@ -57,13 +57,14 @@ Rfftplot = Rfft(I_pmin_plot:I_pmax_plot,I_fmin_plot:I_fmax_plot);
 [Fplot, Vplot2, R_Fv] = FreqSlow2FreqVeloc(fplot, P_axisplot, Rfftplot);
 
 % Apply bandpass filter for plotting waveforms 
-dat_filt = zeros(size(M));  
+M_filt = zeros(size(M));  
 dt = t(2) - t(1);
-costap_wid = 0.2; % 0 => box filter; 1 => Hann window
-for ii = 1:size(dat_filt,1)
+for ii = 1:size(M_filt,1)
     dat_taper = cos_taper(M(ii,:)); 
-    [dat_filt_fft] = tukey_filt( fft(fftshift(dat_taper)),[1/f_max 1/f_min],dt,costap_wid);
-    dat_filt(ii,:) = fftshift(real(ifft(dat_filt_fft)));
+    fs = 1/dt;
+    [b,a] = butter(2,[f_min/(fs/2) f_max/(fs/2)]); % (20 - 150 seconds)
+    %fvtool(b,a);
+    M_filt(ii,:) = filtfilt(b,a,dat_taper);
 end
 
 %%
@@ -74,7 +75,7 @@ set(gcf,'Position',[173.0000  262.0000  880.0000  438.0000]);
 
 subplot(1,2,1); hold on;
 % plot(t,M./max(M,[],2)*50+Delta','-k','linewidth',1);
-plot(t,dat_filt./max(dat_filt,[],2)*1+Delta','-k','linewidth',1);
+plot(t,M_filt./max(M_filt,[],2)*50+Delta','-k','linewidth',1);
 % title('Love waves (0T-4T)'); 
 xlabel('Time (s)'); ylabel('Distance (km)');
 set(gca,'YDir','reverse');
@@ -143,11 +144,12 @@ set(gcf,'Position',[173.0000  262.0000  880.0000  438.0000]);
 
 
 subplot(1,2,1); hold on;
-% plot(t,dat./max(dat,[],2)*10+Delta','-k','linewidth',1);
-plot(t,dat_filt./max(dat_filt,[],2)*1+Delta','-k','linewidth',1);
+% plot(t,M./max(M,[],2)*50+Delta','-k','linewidth',1);
+plot(t,M_filt./max(M_filt,[],2)*50+Delta','-k','linewidth',1);
 % title('Love waves (0T-4T)'); 
 xlabel('Time (s)'); ylabel('Distance (km)');
 set(gca,'YDir','reverse');
+xlim([400 1300]);
 
 subplot(1,2,2); 
 if is_globnorm
@@ -165,7 +167,10 @@ xlim([min(mat.freq_vec(1,1:end)) max(mat.freq_vec(1,1:end))]);
 ylim([v_min v_max]);
 title(method); ylabel('Velocity (km/s)'); xlabel('Frequency (Hz)');
 set(gca,'YDir','normal');
+%%%%%%%%%%%% make colormap %%%%%%%%%%%%
 colormap([ones(30,3).*[0.2665 0.0033 0.3273]; viridis(100)]);
-title(method); ylabel('Velocity (km/s)'); xlabel('Frequency (Hz)');
-set(gca,'YDir','normal');
-colormap([ones(30,3).*[0.2665 0.0033 0.3273]; viridis(100)]);
+pos = get(gca,'Position');
+cb = colorbar;
+set(cb,'linewidth',1.5);
+set(gca,'Position',pos);
+%%%%
