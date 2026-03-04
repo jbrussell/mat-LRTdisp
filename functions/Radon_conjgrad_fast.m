@@ -28,11 +28,11 @@ iF=pow2(nextpow2(it)+1); % Double length
 iDelta=length(delta);
 ip=length(p);
 Mfft=fft(M,iF,2);
-dF=1/(t(1)-t(2));
-f = ((  [1:floor((iF+1)/2)]  -1)/iF)*dF*-1;
+dF=1/(t(2)-t(1));
+f = [0:(iF-mod(iF-1,2))/2 , -(iF-mod(iF,2))/2:-1]*dF/iF;
 
 f_ind = find(f>=f_min*0.9 & f<=f_max*1.1);
-iF_ind = length(f_ind)*2;
+iF_ind = length(f_ind);
 
 % Define blocks
 blk_w = ip; %block width within L
