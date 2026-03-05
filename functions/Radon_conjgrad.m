@@ -1,4 +1,4 @@
-function [ Rfft,f ] = Radon_conjgrad(p,t,M,delta,maxiter,rthresh,method)
+function [ Rfft,f,LL,m_index ] = Radon_conjgrad(p,t,M,delta,maxiter,rthresh,method)
 % Solve radon transform using the conjugate gradient method. 
 %
 % Options for 4 different conjugate gradient methods:
@@ -9,6 +9,10 @@ function [ Rfft,f ] = Radon_conjgrad(p,t,M,delta,maxiter,rthresh,method)
 % (4) 'CG_IRLS': Iteratively reweighted least squares (IRLS) [*slowest method]
 %
 % Algorithms from Ji 2006 & Claerbout 1992
+%
+% 3/2026 - This version outputs the full operator L that is needed in the
+% forward problem to transform from the Radon domain to the time domain, as
+% well as an index matrix that allows the forward calculation in one step.
 % 
 % 10/14/19
 % J. Russell
@@ -21,7 +25,8 @@ end
 
 % Define some array/matrices lengths.
 it=length(t);
-iF=pow2(nextpow2(it)+1); % Double length
+% iF=pow2(nextpow2(it)+1); % Double length
+iF = it;
 iDelta=length(delta);
 ip=length(p);
 Mfft=fft(M,iF,2);
@@ -33,6 +38,10 @@ blk_w = ip; %block width within L
 blk_h = iDelta; % block height within L
 delta_block = repmat(delta,ip,1)'; %repmat(delta,1,blk_w);
 p_block = repmat(p,iDelta,1); %repmat(p',blk_h,1);
+
+% Matrices needed for later reconstruction of time series
+LL = zeros(blk_h,blk_w*length(f)); % full forward operator
+m_index = zeros(blk_w*length(f),length(f)); % index model block
 
 m0 = zeros(length(p),1);
 Rfft = zeros(ip,iF);
@@ -59,5 +68,9 @@ for j = 1:length(f)
     Rfft(:,j) = m;
     rfft(:,j) = r;
 %     Rfft_est(:,j) = L*m; % d_est
+    
+    LL(1:blk_h,(j-1)*blk_w+1:blk_w*j) = L;
+    m_index((j-1)*blk_w+1:blk_w*j,j) = 1;
 end
 
+m_index = sparse(m_index); % convert to sparse to save memory!
