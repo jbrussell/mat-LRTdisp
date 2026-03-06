@@ -1,13 +1,20 @@
 mat-LRTdisp
 =========================
 
-This package includes pieces of code written by Ryan Schultz, particularly for the minimization problem: [Radon-Transform_Schultz-Gu](https://github.com/RyanJamesSchultz/Radon-Transform_Schultz-Gu)
-
-The purpose of this MATLAB package is to extract phase velocity dispersion from multimode surface waves using the Linear Radon Transform (LRT), as demonstrated by Luo et al. (2015). The input is a record section with surface waves windowed in time. The output is a radon panel in the period-phase velocity domain, showing the energy contained in the individual mode branches. The code also includes an interactive tool for picking the maximum peaks corresponding to surface-wave dispersion.
+## A) Radon Transform for Phase Velocity Dispersion
+Part a) of the package extracts phase velocity dispersion from multimode surface waves using the Linear Radon Transform (LRT), as demonstrated by Luo et al. (2015). The input is a record section with surface waves windowed in time. The output is a radon panel in the period-phase velocity (Radon) domain, showing the energy contained in the individual mode branches. The code also includes an interactive tool for picking the maximum peaks corresponding to surface-wave dispersion.
 
 An example synthetic Love wave dataset (fundamental through 4th higher mode) is included in ./pa5_5km/ to demonstrate its application.
 
 ![](./preview.png)
+
+## B) Mode Branch Isolation in Time Domain
+Part b) of the package demonstrates how the LRT can be used to isolate mode branches of interest in the time domain. It is slower because the full forward operator and Radon panel (positive & negative frequencies) must be saved. Gaussian filtering of the fundamental mode is done in the Radon domain, then transformed back to the time domain using the forward operator.
+
+Below is an example of (left) the Gaussian window applied to the fundamental mode Love wave and (right) the resulting isolation of the fundamental mode compared to the true fundamental mode synthetic
+
+![](./preview2.png)
+
 
 **A note about the LRT inversion:**
 We include several different methods for solving the Radon Transform inverse problem. In general, the sparser the method (so-called "high resolution LRT" methods), the more sensitive it is to noise in the data. We have found that the most stable results come from the Weighted Conjugate Guided Gradient (CGG) of Ji (2006) (i.e., CGG_weight in our notation), but you are encouraged to try others:
@@ -22,6 +29,8 @@ We include several different methods for solving the Radon Transform inverse pro
 
 The advantage of the latter 4 methods from Ji (2006) is that regularization parameters are determined by the data, rather than needing to make an apriori guess.
 ___
+This package includes pieces of code written by Ryan Schultz, particularly for the minimization problem: [Radon-Transform_Schultz-Gu](https://github.com/RyanJamesSchultz/Radon-Transform_Schultz-Gu)
+
 References: 
 
     Schultz, R., Gu, Y. J., 2012. 

@@ -80,7 +80,7 @@ gauss_aug(:,I_negf) = flip(gauss_norm,2);
 
 % Plot window function and 2-standard deviations
 figure(13);
-set(gcf,'Position',[56         291        1082         403]);
+set(gcf,'Position',[56         291        1082         403],'color','w');
 colormap([ones(30,3).*[0.2665 0.0033 0.3273]; viridis(100)]);
 FS = 15;
 subplot(1,2,1); box on; hold on;
@@ -151,6 +151,7 @@ for ii = 1:size(M_filt_fund,1)
     M_filt_fund(ii,:) = filtfilt(b,a,dat_taper);
 end
 
+% Plot record sections
 figure(14); clf;
 amp = 30;
 set(gcf,'position',[428          14        1025        1004],'color','w');
@@ -163,7 +164,7 @@ xlim([400 1300]);
 title(['Full mode data (',num2str(1./f_max_filt),'-',num2str(1./f_min_filt),' s)']);
 h1(1) = plot(t,M_filt(1,:)/max(M_filt(1,:))*amp+Delta(1),'-k','linewidth',1);
 h1(2) = plot(t,M_filt_fund(1,:)/max(M_filt_fund(1,:))*amp+Delta_fund(1),'-b','linewidth',1);
-legend(h1,{'Data';'True fund only'},'location','northeast');
+legend(h1,{'Love 5 modes (input)';'Fund. only (target)'},'location','northeast');
 
 subplot(1,2,2); box on; hold on;
 plot(t,M_filt_fund./max(M_filt_fund,[],2)*amp+Delta_fund','-b','linewidth',1);
@@ -174,7 +175,23 @@ xlim([400 1300]);
 title(['Windowed data (',num2str(1./f_max_filt),'-',num2str(1./f_min_filt),' s)']);
 h2(1) = plot(t,M_filt_fund(1,:)/max(M_filt_fund(1,:))*amp+Delta_fund(1),'-b','linewidth',1);
 h2(2) = plot(t,M_win_filt(1,:)/max(M_win_filt(1,:))*amp+Delta(1),'-r','linewidth',1);
-legend(h2,{'True fund only';'Windowed data'},'location','northeast');
+legend(h2,{'Fund. only (target)';'Windowed data (output)'},'location','northeast');
+
+
+% Plot an individual trace
+figure(15); clf;
+set(gcf,'position',[786   471   661   283]);
+box on; hold on;
+itrace = 25;
+plot(t,M_filt(itrace,:)./max(M_filt(itrace,:)),'-k','linewidth',1);
+plot(t,M_filt_fund(itrace,:)./max(M_filt_fund(itrace,:)),'-b','linewidth',2);
+plot(t,M_win_filt(itrace,:)./max(M_win_filt(itrace,:)),'-r','linewidth',2);
+xlabel('Time (s)');
+set(gca,'YDir','reverse','FontSize',FS,'linewidth',1.5);
+xlim([400 1300]);
+title(['Windowed data (Filtered ',num2str(1./f_max_filt),'-',num2str(1./f_min_filt),' s)']);
+legend({'Love 5 modes (input)';'Fund. only (target)';'Windowed data (output)'},'location','northeast');
+save2pdf(['output_waveforms.pdf'],15,500);
 
 % if ~exist(figpath)
 %     mkdir(figpath);
