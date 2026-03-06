@@ -11,6 +11,11 @@
 clear;
 setup_parameters;
 
+% Bandpass filter for plotting purposes.
+% There will likely be some issues at the edges of the Radon window, so filter to try to avoid those effects
+f_min_filt = 1/120; % 1/150;
+f_max_filt = 1/30; % 1/20;
+
 % Load precalculated LRT
 load([LRTmatpath,'LRT_',method,'_aug.mat']);
 f = mat.f;
@@ -44,7 +49,7 @@ dt = t(2) - t(1);
 for ii = 1:size(M_filt,1)
     dat_taper = cos_taper(M(ii,:)); 
     fs = 1/dt;
-    [b,a] = butter(2,[f_min/(fs/2) f_max/(fs/2)]); % (20 - 150 seconds)
+    [b,a] = butter(2,[f_min_filt/(fs/2) f_max_filt/(fs/2)]); % (20 - 150 seconds)
     %fvtool(b,a);
     M_filt(ii,:) = filtfilt(b,a,dat_taper);
 end
@@ -126,7 +131,7 @@ M_win_filt = zeros(size(M_win));
 for ii = 1:size(M_win,1)
     dat_taper = cos_taper(M_win(ii,:)); 
     fs = 1/dt;
-    [b,a] = butter(2,[f_min/(fs/2) f_max/(fs/2)]); % (20 - 150 seconds)
+    [b,a] = butter(2,[f_min_filt/(fs/2) f_max_filt/(fs/2)]); % (20 - 150 seconds)
     %fvtool(b,a);
     M_win_filt(ii,:) = filtfilt(b,a,dat_taper);
 end
@@ -141,7 +146,7 @@ dt_fund = fundmode.t(2) - fundmode.t(1);
 for ii = 1:size(M_filt_fund,1)
     dat_taper = cos_taper(fundmode.M(ii,:)); 
     fs = 1/dt_fund;
-    [b,a] = butter(2,[f_min/(fs/2) f_max/(fs/2)]); % (20 - 150 seconds)
+    [b,a] = butter(2,[f_min_filt/(fs/2) f_max_filt/(fs/2)]); % (20 - 150 seconds)
     %fvtool(b,a);
     M_filt_fund(ii,:) = filtfilt(b,a,dat_taper);
 end
@@ -155,7 +160,7 @@ plot(t,M_filt_fund./max(M_filt_fund,[],2)*amp+Delta_fund','-b','linewidth',1);
 xlabel('Time (s)'); ylabel('Distance (km)');
 set(gca,'YDir','reverse','FontSize',FS,'linewidth',1.5);
 xlim([400 1300]);
-title(['Full mode data (',num2str(1./f_max),'-',num2str(1./f_min),')']);
+title(['Full mode data (',num2str(1./f_max_filt),'-',num2str(1./f_min_filt),' s)']);
 h1(1) = plot(t,M_filt(1,:)/max(M_filt(1,:))*amp+Delta(1),'-k','linewidth',1);
 h1(2) = plot(t,M_filt_fund(1,:)/max(M_filt_fund(1,:))*amp+Delta_fund(1),'-b','linewidth',1);
 legend(h1,{'Data';'True fund only'},'location','northeast');
@@ -166,7 +171,7 @@ plot(t,M_win_filt./max(M_win_filt,[],2)*amp+Delta','-r','linewidth',1);
 xlabel('Time (s)'); ylabel('Distance (km)');
 set(gca,'YDir','reverse','FontSize',FS,'linewidth',1.5);
 xlim([400 1300]);
-title(['Windowed data (',num2str(1./f_max),'-',num2str(1./f_min),')']);
+title(['Windowed data (',num2str(1./f_max_filt),'-',num2str(1./f_min_filt),' s)']);
 h2(1) = plot(t,M_filt_fund(1,:)/max(M_filt_fund(1,:))*amp+Delta_fund(1),'-b','linewidth',1);
 h2(2) = plot(t,M_win_filt(1,:)/max(M_win_filt(1,:))*amp+Delta(1),'-r','linewidth',1);
 legend(h2,{'True fund only';'Windowed data'},'location','northeast');
