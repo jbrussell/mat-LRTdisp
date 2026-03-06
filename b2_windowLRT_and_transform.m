@@ -191,7 +191,7 @@ set(gca,'YDir','reverse','FontSize',FS,'linewidth',1.5);
 xlim([400 1300]);
 title(['Windowed data (Filtered ',num2str(1./f_max_filt),'-',num2str(1./f_min_filt),' s)']);
 legend({'Love 5 modes (input)';'Fund. only (target)';'Windowed data (output)'},'location','northeast');
-save2pdf(['output_waveforms.pdf'],15,500);
+% save2pdf(['output_waveforms.pdf'],15,500);
 
 % if ~exist(figpath)
 %     mkdir(figpath);
