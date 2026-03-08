@@ -180,7 +180,7 @@ legend(h2,{'Fund. only (target)';'Windowed data (output)'},'location','northeast
 
 % Plot an individual trace
 figure(15); clf;
-set(gcf,'position',[786   471   661   283]);
+set(gcf,'position',[786   471   661   283],'color','w');
 box on; hold on;
 itrace = 25;
 plot(t,M_filt(itrace,:)./max(M_filt(itrace,:)),'-k','linewidth',1);
